@@ -1,3 +1,4 @@
-Model,Test Loss,Test Accuracy
-Custom CNN,4.900363922119141,0.044646188616752625
-MobileNetV2 Transfer Learning,3.978870391845703,0.17497824132442474
+Model,Total Parameters,Trainable Parameters,Non-Trainable Parameters,Test Accuracy,Test Loss,Training Time (seconds)
+Custom CNN,504580,504580,0.0,0.0312,5.0275,184.66
+MobileNetV2,2636292,378308,2257984.0,0.2945,2.8735,218.39
+ResNet50,24162628,574916,23587712.0,0.3093,2.7939,552.88

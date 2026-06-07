@@ -1,0 +1,10 @@
+Component,Result
+Dataset,Stanford Cars Dataset
+Classes,196
+Training Images,6516
+Validation Images,1628
+Testing Images,8041
+Best Model,ResNet50
+Best Test Accuracy,0.3093
+Best Macro F1,0.2998
+Explainability Methods,Grad-CAM and SHAP
