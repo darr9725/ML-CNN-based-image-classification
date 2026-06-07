@@ -1,60 +1,118 @@
-# Vehicle Type Classification System using CNN and Transfer Learning
+# Vehicle Type Classification with CNNs, Transfer Learning, and Explainable AI
 
 ## Project Overview
 
-This project develops an image classification system capable of identifying vehicle types from images using Convolutional Neural Networks (CNNs).
+This project develops and evaluates deep learning models for fine-grained vehicle image classification using the Stanford Cars Dataset. It was completed for a Machine Learning course under the Transportation and Traffic Intelligence topic.
 
-The project was completed as part of a Machine Learning course and focuses on Transportation and Traffic Intelligence applications, where automatic vehicle recognition can support traffic monitoring, parking management, infrastructure planning, and intelligent transportation systems.
+The implementation compares:
 
-## Objectives
+1. A custom convolutional neural network (CNN)
+2. MobileNetV2 transfer learning
+3. ResNet50 transfer learning
 
-* Build a custom CNN model for vehicle classification.
-* Apply transfer learning using MobileNetV2.
-* Compare the performance of both approaches.
-* Evaluate classification performance using standard machine learning metrics.
+The project also applies Grad-CAM and SHAP to explain selected ResNet50 predictions.
+
+## Motivation
+
+Automated vehicle recognition can contribute to traffic monitoring, parking analysis, infrastructure planning, and transportation research. The selected dataset is a useful proof of concept for recognizing visually similar passenger cars.
+
+> **Scope note:** Stanford Cars contains 196 fine-grained car make, model, and year classes. It does not contain broad road-user categories such as buses, trucks, motorcycles, or bicycles. A real public-policy deployment would require a broader and more representative dataset, additional validation, and aggregation into policy-relevant vehicle categories.
+
+## Research Questions
+
+- How accurately can a custom CNN classify images from the Stanford Cars Dataset?
+- Do MobileNetV2 and ResNet50 transfer learning improve performance over the custom CNN?
+- Which model provides the best trade-off between predictive performance, training time, and parameter count?
+- What image regions influence selected ResNet50 predictions according to Grad-CAM and SHAP?
+- What do confidence and error analyses reveal about the model's limitations?
 
 ## Dataset
 
-**Dataset:** Stanford Cars Dataset by Classes Folder
+**Dataset:** Stanford Cars Dataset by Classes Folder  
+**Source:** [Kaggle dataset](https://www.kaggle.com/datasets/jutrera/stanford-car-dataset-by-classes-folder)
 
-* 16,185 vehicle images
-* 196 vehicle classes
-* RGB vehicle photographs
-* Predefined train and test splits
+| Item | Count |
+|---|---:|
+| Total images | 16,185 |
+| Classes | 196 |
+| Official training-folder images | 8,144 |
+| Training split used | 6,516 |
+| Validation split used | 1,628 |
+| Official test images | 8,041 |
 
-Dataset source:
-https://www.kaggle.com/datasets/jutrera/stanford-car-dataset-by-classes-folder
+Images are resized to `224 x 224` RGB. The official training folder is divided into 80% training and 20% validation data using seed `42`; the official test folder remains an independent test set.
+
+## Methodology
+
+- TensorFlow/Keras image loading with categorical labels
+- Image resizing to `224 x 224`
+- Data augmentation using horizontal flipping, rotation, zoom, and contrast adjustment
+- Model-specific preprocessing inside each transfer learning model
+- Adam optimizer with a learning rate of `0.0005`
+- Categorical cross-entropy loss
+- 15 training epochs per model
+- Frozen ImageNet feature extractors for MobileNetV2 and ResNet50
+
+## Results
+
+| Model | Test Accuracy | Macro F1 | Training Time (s) | Total Parameters |
+|---|---:|---:|---:|---:|
+| Custom CNN | 0.0312 | 0.0128 | 184.66 | 504,580 |
+| MobileNetV2 | 0.2945 | 0.2809 | 218.39 | 2,636,292 |
+| ResNet50 | 0.3093 | 0.2998 | 552.88 | 24,162,628 |
+
+ResNet50 achieved the highest test accuracy and macro F1 score, while MobileNetV2 produced similar performance with substantially fewer parameters and a shorter training time. The custom CNN performed poorly on this difficult 196-class fine-grained classification problem.
+
+## Evaluation and Explainability
+
+The notebook includes:
+
+- Training and validation accuracy/loss curves
+- Test accuracy and loss
+- Precision, recall, and F1 classification reports
+- Confusion matrices for all three models
+- Parameter and training-time comparisons
+- Correct and incorrect ResNet50 prediction examples
+- Prediction-confidence analysis
+- Grad-CAM explanations for correctly classified ResNet50 examples
+- SHAP explanations for selected ResNet50 test images
 
 ## Repository Structure
 
-* `proposal/` – Project proposal document.
-* `notebooks/` – Kaggle notebook implementation and execution instructions.
-* `outputs/` – Generated figures, evaluation reports, and model comparison results.
+```text
+ML-CNN-based-image-classification/
+|-- Notebooks/
+|   |-- vehicle-type-classification-cnn-transfer-learning.ipynb
+|   `-- Running_instructions.md
+|-- Outputs/
+|   |-- *.pdf
+|   `-- *.csv
+|-- Proposal/
+|   `-- Vehicle_Type_Classification_CNN_Project_Proposal_Daniel_Arias_Royo.docx
+|-- .gitignore
+`-- README.md
+```
 
-## Models Implemented
+Trained `.keras` files are generated by the notebook but intentionally excluded from Git because of their size.
 
-1. Custom CNN
-2. MobileNetV2 Transfer Learning
+## Reproducibility
 
-## Evaluation Metrics
+- **Public Kaggle notebook:** [vehicle-type-classification-cnn-transfer-learning](https://www.kaggle.com/code/danielariasroyo/vehicle-type-classification-cnn-transfer-learning)
+- **Validated Kaggle version:** 11
+- **Public GitHub repository:** [darr9725/ML-CNN-based-image-classification](https://github.com/darr9725/ML-CNN-based-image-classification)
+- **Detailed instructions:** [Notebooks/Running_instructions.md](Notebooks/Running_instructions.md)
 
-* Accuracy
-* Loss
-* Classification Report
-* Confusion Matrix
+Run the notebook sequentially from top to bottom. Generated artifacts are written to `/kaggle/working/project_outputs`.
 
-## Main Outputs
+## Limitations
 
-* Dataset exploration
-* Class distribution visualization
-* Sample image visualization
-* Training and validation curves
-* Confusion matrix
-* Classification report
-* Model comparison table
+- The 196 classes represent fine-grained passenger car identities rather than broad vehicle types.
+- The transfer learning backbones are frozen; fine-tuning may improve performance.
+- The models were trained for 15 epochs without an extensive hyperparameter search.
+- Grad-CAM and SHAP are demonstrated on selected ResNet50 examples rather than all models.
+- The reported results should not be interpreted as deployment-ready public-policy performance.
 
 ## Author
 
-Daniel Arias
-
+Daniel Arias Royo  
 Machine Learning Project

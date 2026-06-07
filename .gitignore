@@ -1,17 +1,38 @@
-# Large trained model files
+# Trained models and checkpoints
 *.keras
 *.h5
 *.hdf5
+*.ckpt
+*.ckpt.*
+checkpoints/
+saved_model/
 
-# Zip files
+# Dataset archives and local dataset folders
 *.zip
+data/
+datasets/
 
-# Python cache
+# Python cache and tooling
 __pycache__/
-*.pyc
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
 
-# Jupyter checkpoints
+# Virtual environments and secrets
+.venv/
+venv/
+.env
+
+# Jupyter and Kaggle temporary files
 .ipynb_checkpoints/
-
-# Kaggle temporary files
 .kaggle/
+
+# IDE and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.log
